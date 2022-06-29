@@ -1,0 +1,36 @@
+Choose random word, declare it a variable , create a list with the same number of underscores as letters in the variable, 
+# and (maybe) enter it into a list and split it on seperate letters
+
+set a count for 7
+
+While count > 0
+
+Print 'Guess a letter or the whole word'
+
+Accept input
+
+#check input type
+if input type != str
+	print "Guess must be a letter or a word."
+
+#Check Guess
+if input = variable
+	print "You Got it! You won!"
+elif input != variable
+	match with position in list
+
+#Check if letter or word
+if len(Guess) >= 1
+	print "You guessed a word"
+
+#Update List
+enter letter into list in proper position
+or
+if letter completes the word
+print "You Got it! You won!"
+Break
+
+count = count - 1
+
+if count = 0
+print "Sorry, you lost. The word was ____."
