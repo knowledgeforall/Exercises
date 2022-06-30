@@ -1,0 +1,73 @@
+count = 0
+startingSlot = [] # should have participantNum # of empty slots? # list or dictionary?
+START UP
+
+print("Welcome to Tounaments R Us")
+print("==========================")
+participantNum = input("Enter the number of participants: ")
+print ("There are {} participant slots ready for sign-ups.".format(participantNum))
+
+MAIN MENU
+
+print("Participant Menu")
+print("================")
+print("1. Sign Up")
+print("2. Cancel Sign Up")
+print("3. View Participants")
+print("4. Save Changes")
+print("5. Exit")
+
+menuInput = input("Enter a number: ")
+
+if menuInput = 1
+	print("Participant Sign UP")
+	print("===================")
+
+	if count = participantNum
+		print("Sorry, there are no more slots available")
+		break
+	else
+		participantName = input("Participant Name: ")
+		desiredStartingSlot = input("Desired starting slot #[1-50]: ") #account and exceptions
+
+	if count < participantNum
+	
+	desiredStartingSlot into list at index desiredStartingSlot - 1
+	
+if menuInput = 2
+	print("Participant Cancellation")
+	print("========================")
+
+	participantName = input("Participant Name: ")
+	startingSlot = input("Starting slot #[1-50]: ") #account and exceptions
+
+	count = count - 1
+	
+if menuInput = 3
+	print("View Participants")
+	print("=================")
+	viewSlot =  input("Starting slot #[1-50]: ") #account and exceptions
+
+	#open tournament_participant.csv
+	#load into list or dictionary
+	#print viewSlot plus 5 before and 5 after (if exists) with newlines and slot numbers
+	
+if menuInput = 4
+	print("Save Changes")
+	print("============")
+	saveChoice = input("Save your changes to CSV? [y/n] ")
+
+	if saveChoice = "y" #account for case and exceptions
+		#save to csv file
+
+count = count + 1
+	
+if menuInput = 5
+	print("Exit")
+	print("====")
+	print("Any unsaved changes will be lost.")
+	exit = input("Are you sure you want to exit? [y/n] ")
+
+	if exit = "y" #account for case and exceptions
+		print("Goodbye!")
+		break
