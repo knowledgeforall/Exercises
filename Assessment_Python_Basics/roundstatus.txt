@@ -1,0 +1,1 @@
+print("The board is currently showing {} and your round total is {}".format(blankWord, players[initPlayer]["roundtotal"]))
