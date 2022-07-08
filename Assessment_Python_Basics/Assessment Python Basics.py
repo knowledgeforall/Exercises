@@ -133,12 +133,13 @@ def round2Setup():
     global roundNum
     global initPlayer
     global roundUnderscoreWord
+    global roundWinner
     
     #add round total to game total
+    players[roundWinner]["gametotal"] = players[roundWinner]["gametotal"] + players[roundWinner]["roundtotal"]
     # Set round total for each player = 0
     count = 1
     for roundtotal in range (3):
-        players[count]["gametotal"] = players[count]["gametotal"] + players[count]["roundtotal"]
         players[count]["roundtotal"] = 0
         print("-----------------")
         print("{}, your game total is {}.".format(players[count]["name"], players[count]["gametotal"]))
@@ -147,8 +148,6 @@ def round2Setup():
         
     roundNum = roundNum + 1
     if roundNum <= 2:
-        
-       
         # Return the starting player number (random)
         initPlayer = random.choice(list(players))
         
@@ -187,6 +186,7 @@ def spinWheel(playerNum):
     global currentAmount
     global goodGuess
     global randomWheelValue
+    global roundNum
     randomWheelValueInt = 0
     
     # Get random value for wheellist
@@ -285,15 +285,12 @@ def buyVowel(playerNum):
     
     while vowelGuess == False:
         if enoughCash == True:
-            boughtVowel = str(input("Player {}, please enter the vowel you would like to buy: ".format(initPlayer)))
+            boughtVowel = str(input("{}, please enter the vowel you would like to buy: ".format(players[initPlayer]["name"])))
 
         # Ensure letter is a vowel
-        vowelGuess = True
         for vowel in vowels:
             if boughtVowel == vowel:
-                vowelGuess == True
-            else:
-                vowelGuess == False
+                vowelGuess = True
 
         if vowelGuess == True:
             for letter in range(len(roundWord)):
@@ -307,7 +304,7 @@ def buyVowel(playerNum):
 
         if vowelGuess == False:
             print("Sorry, that is not a vowel. Please try again.")
-            getPlayer()
+            # buyVowel(initPlayer)
         
     wofTurn(initPlayer)
 
@@ -316,6 +313,7 @@ def guessWord(playerNum):
     global blankWord
     global roundWord
     global roundNum
+    global roundWinner
     
     # Take in player number
     global initPlayer
@@ -326,6 +324,7 @@ def guessWord(playerNum):
     # Fill in blankList with all letters, instead of underscores if correct
     if guessWordInput == roundWord:
         print("The word {} is correct!".format(roundWord))
+        roundWinner = initPlayer
         stillinTurn = False
         round2Setup()
         
@@ -385,33 +384,56 @@ def wofRound():
     global playerNum
     initPlayer = wofRoundSetup()
     playerNum = initPlayer
-    
-    # Keep doing things in a round until the round is done ( word is solved)
-        # While still in the round keep rotating through players
-        # Use the wofTurn fuction to dive into each players turn until their turn is done.
+
 def guessFinalWord(playerNum):
     global players
     global blankWord
     global roundWord
     global roundNum
+    global winPlayer
     finalPrize = 1000000000000
     
     # Take in player number
-    global winplayer
+    global winPlayer
     global roundWord
     
     # Ask for input of the word and check if it is the same as wordguess
-    guessWordInput = str(input("Enter your word guess: "))
+    guessWordInput = str(input("Enter your final word guess: "))
     
     # Fill in blankList with all letters, instead of underscores if correct
     if guessWordInput == roundWord:
+        finalScore = players[winPlayer]["gametotal"] + finalPrize
         print("The word {} is correct!".format(roundWord))
-        players[count]["gametotal"] = players[count]["gametotal"] + int(finalPrize)
-        print("Your final score is {}.".format(players[count]["gametotal"]))
+        print("Your final score is {}.".format(finalScore))
+        quit()
         
-    else:
+    if guessWordInput != roundWord:
         print("Sorry, that is incorrect.")
-        print("Your final score is {}.".format(players[count]["gametotal"]))
+        print("Your final score is {}.".format(players[winPlayer]["gametotal"]))
+        quit()
+
+def finalVowel(finalVowelGuess):
+    global vowelGuessFinal
+    global roundWord
+    
+    # Ensure letter is a vowel
+    vowelGuess = True
+    for vowel in vowels:
+        if finalVowelGuess == vowel:
+            vowelGuess == True
+        else:
+            vowelGuess == False
+
+    if vowelGuess == True:
+        for letter in range(len(roundWord)):
+            if list(roundWord)[letter] == finalVowelGuess:
+                roundUnderscoreWord[letter] = finalVowelGuess
+                # return goodGuess= true if it was a correct guess
+                vowelChoice = True
+    print(''.join(roundUnderscoreWord))
+
+    if vowelGuess == False:
+        print("Sorry, that is not a vowel. Please try again.")
 
 def wofFinalRound():
     global roundWord
@@ -419,9 +441,11 @@ def wofFinalRound():
     global finalroundtext
     global finalRound
     global roundUnderscoreWord
-    global winplayer
+    global winPlayer
+    global vowelGuess
+    global vowelGuessFinal
     finalRound = True
-    winplayer = 0
+    winPlayer = 0
     amount = 0
     # Find highest gametotal player.  They are playing.
 
@@ -429,42 +453,47 @@ def wofFinalRound():
     for player in players:
         if players[player]['gametotal'] > currentHighest:
             currentHighest = players[player]['gametotal']
-            winplayer = player
+            winPlayer = player
 
     # Print out instructions for that player and who the player is.
-    print("Player {}, you're going to the final round!".format(winplayer))
+    print("{}, you're going to the final round!".format(players[winPlayer]["name"]))
     print("-----------------")
     print("This is the Final Round!")
     
     # Use the getWord function to reset the roundWord and the blankWord ( word with the underscores)
     getWord()
     
-    # Use the guessletter function to check for {'R','S','T','L','N','E'}
-    #for loop
-    
+    # check for {'R','S','T','L','N','E'}
     finalLetterSet = {'r','s','t','l','n','e'}
     
-    for letter in finalLetterSet:
-        guessletter(letter, winplayer)
-    
+    for letterguess in finalLetterSet:
+        for letter in range(len(roundWord)):
+            if list(roundWord)[letter] == letterguess:
+                roundUnderscoreWord[letter] = letterguess
     
     # Print out the current blankWord with whats in it after applying {'R','S','T','L','N','E'}
+    print("The final word looks like this so far:")
     print(''.join(roundUnderscoreWord))
+    print("")
     
-    # Gather 3 consonats and 1 vowel and use the guessletter function to see if they are in the word
-    # consonantCount = 0
-    # while consonantCount < 3:
-    #     guessletter(letter, winplayer)
-    #     consonantCount = consonantCount + 1
-    guessletter(letter, winplayer)
-    guessletter(letter, winplayer)
-    guessletter(letter, winplayer)
-    buyVowel(winplayer)
+    # Gather 3 consonats and 1 vowel and see if they are in the word
+    consonantCount = 1
+    while consonantCount < 4:
+        letterguess = str(input("{}, please enter consonant number {} guess: ".format(players[winPlayer]["name"], consonantCount)))
+        for letter in range(len(roundWord)):
+            if list(roundWord)[letter] == letterguess:
+                roundUnderscoreWord[letter] = letterguess
+        consonantCount = consonantCount + 1
+
+    # buyVowel(winPlayer)
+    vowelGuessFinal = str(input("{}, please enter a vowel guess: ".format(players[winPlayer]["name"])))
+    finalVowel(vowelGuessFinal)
+    
     # Print out the current blankWord again
     print(''.join(roundUnderscoreWord))
     
     # Get user to guess word
-    guessFinalWord(winplayer)
+    guessFinalWord(winPlayer)
     
     # If they do, add finalprize and gametotal and print out that the player won 
 
